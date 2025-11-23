@@ -1,0 +1,25 @@
+FROM node:20
+
+# Working directory be app
+WORKDIR /app
+
+COPY package*.json ./
+
+###  Installing dependencies
+
+RUN npm install --silent
+
+# copy local files to app folder
+COPY . .
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev", "--", "--host"]
+
+
+# docker run \
+#     --name mern-frontend \
+#     --network mern-net \
+#     -p 5173:5173 \
+#     -e VITE_BACKEND_URL="http://mern-backend:8000" \
+#     frontend

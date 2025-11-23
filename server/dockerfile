@@ -1,0 +1,52 @@
+# --------------------------
+# 1. Build Stage
+# --------------------------
+FROM node:18 AS build
+
+WORKDIR /app
+
+# Copy only package files first (for caching)
+COPY package*.json ./
+
+# Install all dependencies (including dev)
+RUN npm install --silent
+
+# Copy the rest of backend code
+COPY . .
+
+# --------------------------
+# 2. Runtime Stage
+# --------------------------
+FROM node:18 AS production
+
+WORKDIR /app
+
+# Copy only production dependencies
+COPY package*.json ./
+RUN npm install --omit=dev
+
+# Copy backend build or entire code (depends on project)
+COPY --from=build /app ./
+
+# App port
+EXPOSE 8000
+
+# Add optional healthcheck
+HEALTHCHECK --interval=30s --timeout=5s \
+CMD wget -qO- http://localhost:8000/health || exit 1
+
+CMD ["node", "server.js"]
+
+
+# docker run -d \
+#   --name mern-backend \
+#   --network mern-net \
+#   -p 8000:8000 \
+#   -e MONGODB_URI="your-mongo-uri" \
+#   -e PORT=8000 \
+#   -e JWT_SECRET="your-secret" \
+#   -e NODE_ENV=development \
+#   -e SMTP_USER="your-smtp-user" \
+#   -e SMTP_PASS="your-smtp-pass" \
+#   -e SENDER_EMAIL="your-email" \
+#   backend

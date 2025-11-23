@@ -1,0 +1,32 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# Log files
+*.log
+npm-debug.log*
+
+# Build artifacts
+dist/
+build/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files (if applicable)
+.vscode/
+.idea/
+
+# Editor swap files
+*.swp
+*.swo
+
+# Test coverage reports
+coverage/
+
+# Uploaded files (if stored locally and not part of the core repo)
+uploads/
