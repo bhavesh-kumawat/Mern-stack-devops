@@ -1,39 +1,39 @@
 # --------------------------
 # 1. Build Stage
 # --------------------------
-FROM node:18 AS build
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
-# Copy only package files first (for caching)
 COPY package*.json ./
+RUN npm ci
 
-# Install all dependencies (including dev)
-RUN npm install --silent
-
-# Copy the rest of backend code
 COPY . .
 
+# Optional build step (TypeScript etc.)
+# RUN npm run build
+
+
 # --------------------------
-# 2. Runtime Stage
+# 2. Production Stage
 # --------------------------
-FROM node:18 AS production
+FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy only production dependencies
-COPY package*.json ./
-RUN npm install --omit=dev
+# Copy only required files
+COPY --from=build /app/package*.json ./
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/server.js ./server.js
+# or COPY --from=build /app/dist ./dist
 
-# Copy backend build or entire code (depends on project)
-COPY --from=build /app ./
-
-# App port
 EXPOSE 8000
 
-# Add optional healthcheck
+# Non-root user
+USER node
+
 HEALTHCHECK --interval=30s --timeout=5s \
-CMD wget -qO- http://localhost:8000/health || exit 1
+    CMD wget -qO- http://localhost:8000/health || exit 1
 
 CMD ["node", "server.js"]
 
