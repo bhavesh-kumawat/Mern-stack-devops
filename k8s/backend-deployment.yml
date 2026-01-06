@@ -22,7 +22,7 @@ spec:
           - containerPort: 8000
           env:
             - name: MONGODB_URI
-              value: 'mongodb+srv://bhavesh:pppp1111@cluster0.lzjcop9.mongodb.net/'
+              value: 'your_mongo_uri'
             - name: PORT 
               value: '8000'
             - name: JWT_SECRET
