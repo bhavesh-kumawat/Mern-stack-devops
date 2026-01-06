@@ -1,0 +1,37 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: backend-deployment
+  namespace: auth-mern
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      name: backend-pod
+      namespace: auth-mern
+      labels: 
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: bhaveshdocker74807/auth-mern-backend
+          ports:
+          - containerPort: 8000
+          env:
+            - name: MONGODB_URI
+              value: 'mongodb+srv://bhavesh:pppp1111@cluster0.lzjcop9.mongodb.net/'
+            - name: PORT 
+              value: '8000'
+            - name: JWT_SECRET
+              value: 'your_jwt_secret_key'
+            - name: NODE_ENV
+              value: 'development'
+            - name: SMTP_USER
+              value: 'your_smtp_user'
+            - name: SMTP_PASS
+              value: 'your_smtp_password'
+            - name: SENDER_EMAIL
+              value: 'your_sender_email'

@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata: 
+  name: backend-svc
+  namespace: auth-mern
+spec:
+  selector:
+    app: backend
+  ports:
+  - port: 8000
+    targetPort: 8000

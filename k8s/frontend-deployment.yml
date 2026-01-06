@@ -1,0 +1,25 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: frontend-deployment
+  namespace: auth-mern
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      name: frontend-pod
+      namespace: auth-mern
+      labels: 
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: bhaveshdocker74807/auth-mern-frontend
+          ports:
+            - containerPort: 80
+          env:
+            - name: VITE_BACKEND_URL
+              value: 'http://localhost:8000'
